@@ -1,1 +1,1 @@
-# My internal profolio site
+# Sample projects
