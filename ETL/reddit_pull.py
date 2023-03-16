@@ -7,10 +7,12 @@ import logging
 import sys
 import toml
 
-
-
 def main(config_path):
+    """main function to run Reddit ETL
 
+    Args:
+        config_path (str): toml based file with configuration variables
+    """
     #read in config va
     with open(config_path, mode="r") as fp:
         config = toml.load(fp)

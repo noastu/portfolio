@@ -1,8 +1,6 @@
 import requests
 import datetime
 import pandas as pd
-import psycopg2
-from sqlalchemy import create_engine
 
 class RedditAPI:
     """A class to handle Reddit API calls
@@ -24,10 +22,10 @@ class RedditAPI:
         self.header = self._generate_headers()
 
     def _generate_headers(self):
-        """A method to generate headers used for authtification
+        """A method to generate headers used for authentication
 
         Returns:
-            dict: header dictonary
+            dict: header dictionary
         """
         # note that CLIENT_ID refers to 'personal use script' and SECRET_TOKEN to 'token'
         auth = requests.auth.HTTPBasicAuth(self.client, self.token)

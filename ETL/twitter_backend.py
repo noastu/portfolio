@@ -1,8 +1,6 @@
 import requests
 import datetime
 import pandas as pd
-import psycopg2
-from sqlalchemy import create_engine
 
 class TwitterAPI:
     """A class to handle Twitter API

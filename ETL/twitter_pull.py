@@ -11,7 +11,7 @@ def main(config_path):
     """main function to run Twitter ETL
 
     Args:
-        config_path (str): toml based file with configuation variables
+        config_path (str): toml based file with configuration variables
     """
     #read in config va
     with open(config_path, mode="r") as fp:
