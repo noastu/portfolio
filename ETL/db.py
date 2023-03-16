@@ -3,7 +3,7 @@ import pandas as pd
 import datetime
 
 class DatabaseHandler:
-    """A Class to handel database management during ETL
+    """A Class to handle database management during ETL
     """
 
     def __init__(self, conn_string, data = pd.DataFrame):
@@ -18,15 +18,13 @@ class DatabaseHandler:
         self.data = data
 
     def append_data(self, target, schema, batch = True):
-        """A method to append data to database. Creates batch date by default
+        """A method to append data to database. Creates batch date by default.
 
         Args:
             target (str): target table in database
             schema (str): database schema
             batch (bool, optional): flag to create batch data. Defaults to True.
 
-        Returns:
-            _type_: _description_
         """
         # create batch date if true
         if self.batch:
@@ -35,11 +33,10 @@ class DatabaseHandler:
             pass
         # append data to table    
         self.data.to_sql(target, schema=schema, con=self.engine, if_exists='append', index=False)
-        return None
-
 
     def merge_data(self, source, target, schema, query, batch = True):
-        """A method to run SQL files to merge data.
+        """A method to run SQL statement to merge data between staging and destination tables.
+            Creates batch date by default.
 
         Args:
             source (str): staging table
@@ -86,5 +83,5 @@ class DatabaseHandler:
                 raw_query = f.read()
             return raw_query
         else:
-            #query already sql. example sproc
+            #query already sql. example sql stored procedure
             return query_dict['value']
