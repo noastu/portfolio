@@ -47,7 +47,4 @@ class TorontoDataProxy(TorontoData):
         if not os.path.exists(self.export_path):
             raise FileNotFoundError(self.export_path)
         self.get()
-        
-TorontoDataProxy("x", "/home/nstuart/Documents/data_export").get_data()
-
 
