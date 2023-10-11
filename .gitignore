@@ -1,3 +1,4 @@
+iot_stream/src/main/resources/application.properties
 iot_stream/target/classes/application.properties
 iot_stream/.vscode/settings.json
 *.class
