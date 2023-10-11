@@ -1,3 +1,4 @@
+//main java class
 package com.sensor;
 
 import org.springframework.boot.SpringApplication;
