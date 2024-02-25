@@ -5,20 +5,15 @@
 This script performs Extract, Transform, Load (ETL) operations by scraping data from the VCA website, exporting it to a JSON file, and uploading it to a MongoDB database.
 
 ## Installation
-
-1. Clone the repository:
-
-    ```bash
-    git clone https://github.com/noastu/portfolio/vca-data-etl.git
     ```
 
-2. Install the required dependencies:
+1. Install the required dependencies:
 
     ```bash
     pip install -r requirements.txt
     ```
 
-3. Configure the runtime variables:
+2. Configure the runtime variables:
 
     - Create a `config.toml` file in the root directory with the following structure:
 
