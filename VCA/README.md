@@ -2,10 +2,9 @@
 
 ## Overview
 
-This script performs Extract, Transform, Load (ETL) operations by scraping data from the VCA website, exporting it to a JSON file, and uploading it to a MongoDB database.
+This script performs Extract, Transform, Load (ETL) operations by scraping data from the VCA website, cleaning it, exporting it to a JSON file, and uploading it to a MongoDB database.
 
 ## Installation
-    ```
 
 1. Install the required dependencies:
 
@@ -45,11 +44,13 @@ python etl_script.py
 
 - **get_data()**: Scrapes data from the VCA website and exports it to a JSON file named `vca_detail.json`.
   
-- **upload_data()**: Uploads data from `vca_detail.json` to a MongoDB database. Drops an existing collection named `vca` in the `dogs_nlp` database, inserts the data into the `vca` collection, creates an index on the `breed` field, and prints the total number of records inserted into the collection.
+- **clean_data()**: Cleans the scraped data. Reads the scraped data from the JSON file, performs cleaning operations using a SQL script, and exports the cleaned data to a new JSON file named `vca_cleaned.json`.
+
+- **upload_data()**: Uploads data from `vca_cleaned.json` to a MongoDB database. Drops an existing collection named `vca` in the `dogs_nlp` database, inserts the data into the `vca` collection, creates an index on the `breed` field, and prints the total number of records inserted into the collection.
 
 ## Logging
 
-The script logs informational and error messages to a log file named `etl.log` located in the specified log directory. Informational messages include details about scraping data from the VCA website, exporting data to a file, and inserting data into the MongoDB database. Error messages are logged in case of exceptions during scraping or database operations.
+The script logs informational and error messages to a log file named `etl.log` located in the specified log directory. Informational messages include details about scraping data from the VCA website, cleaning the data, exporting data to a file, and inserting data into the MongoDB database. Error messages are logged in case of exceptions during scraping, cleaning, or database operations.
 
 ## VCA Module
 

@@ -5,6 +5,7 @@ This module provides a class, VCAScrape, for scraping information about dog bree
 import requests
 from bs4 import BeautifulSoup
 from tqdm import tqdm
+from datetime import datetime
 
 class VCAScrape:
     """
@@ -68,6 +69,7 @@ class VCAScrape:
         breed['details'] = self._breed_details(soup)
         breed['stats'] = self._breed_stats(soup)
         breed['traits'] = self._breed_traits(soup)
+        breed['created_ts'] = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         return breed
     
     def _breed_details(self, soup):

@@ -1,9 +1,14 @@
 """
-This script performs Extract, Transform, Load (ETL) operations by scraping data from the VCA website, exporting it to a JSON file, and uploading it to a MongoDB database.
+This script performs Extract, Transform, Load (ETL) operations by scraping data from the VCA website, cleaning it, exporting it to a JSON file, and uploading it to a MongoDB database.
 
 It reads configuration settings from a TOML file ('config.toml') to set up runtime variables such as MongoDB credentials, export path for scraped data, and log path for storing log files.
 
-Logging is configured to capture informational and error messages during script execution. Informational messages include details about scraping data from the VCA website, exporting data to a file, and inserting data into the MongoDB database. Error messages are logged in case of exceptions during scraping or database operations.
+Logging is configured to capture informational and error messages during script execution. Informational messages include details about scraping data from the VCA website, exporting data to a file, cleaning the data, and inserting data into the MongoDB database. Error messages are logged in case of exceptions during scraping, cleaning, or database operations.
+
+Overview:
+    - The script scrapes data about dog breeds from the VCA website, extracts relevant information, cleans the data, and loads it into a MongoDB database.
+    - Configuration settings are read from 'config.toml' to customize the behavior of the script.
+    - Logging is utilized to track the progress of the ETL process and capture any errors that may occur.
 
 """
 
@@ -12,6 +17,9 @@ import toml
 import vca
 import os
 import logging
+import duckdb
+import sys
+from datetime import datetime
 from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
 
@@ -28,7 +36,7 @@ log_path = config['log']['log_path']
 # Set up logging configuration
 logging.basicConfig(filename=os.path.join(log_path, 'etl.log'), filemode='w', format='%(asctime)s | %(levelname)s | %(message)s')
 log = logging.getLogger()
-log.setLevel(logging.DEBUG)
+log.setLevel(logging.INFO)
 
 def get_data():
     """
@@ -53,6 +61,32 @@ def get_data():
         log.info(f'Data exported to: {export_path}')
     except Exception as e:
         log.error(f'Error scraping data from VCA: {e}')
+        sys.exit()
+
+def clean_data():
+    """
+    Cleans the scraped data.
+
+    This function reads the scraped data from the JSON file, performs cleaning operations using a SQL script, and exports the cleaned data to a new JSON file.
+
+    Returns:
+        None
+    """
+    try:
+        log.info('Cleaning data...')
+        # Read JSON data into a DuckDB DataFrame
+        vca = duckdb.read_json('.\\vca_detail.json')
+        # Read SQL script for cleaning operations
+        with open(os.path.join(export_path, 'clean_data.sql'), 'r') as f:
+            clean_sql = f.read()
+        # Apply cleaning operations
+        vca = duckdb.sql(clean_sql).to_df()
+        # Export cleaned data to JSON file
+        vca.to_json('vca_cleaned.json', orient='records', index=False)
+        log.info('Data cleaning completed.')
+    except Exception as e:
+        log.error(f'Error cleaning data: {e}')
+        sys.exit()
 
 def upload_data():
     """
@@ -78,7 +112,7 @@ def upload_data():
 
             # Read data from JSON file
             log.info('Preparing scraped data for insertion...')
-            with open(os.path.join(export_path, 'vca_detail.json'), 'r') as f:
+            with open(os.path.join(export_path, 'vca_cleaned.json'), 'r') as f:
                 raw_data = json.load(f)
 
             # Insert data into 'vca' collection
@@ -90,8 +124,10 @@ def upload_data():
             log.info(f"Total records in collection: {total}")
     except Exception as e:
         log.error(f'Error inserting data to MongoDB: {e}')
+        sys.exit()
 
 
 if __name__ == "__main__":
     get_data()
+    clean_data()
     upload_data()
