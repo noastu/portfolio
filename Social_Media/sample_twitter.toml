@@ -1,0 +1,14 @@
+[paths]
+log_path = "/home/user/Documents/logs/"
+data_path = "/home/user/Documents/files/"
+
+[twitterAPI]
+bearer_token = "token"
+search_list = ['nyc', 'losangeles', 'chicago']
+
+[database]
+connection_string = 'postgresql+psycopg2://user:password@host:port/database'
+staging_table = "z_twitter_cities"
+target_table = "twitter_cities"
+schema = 'public'
+query = {query_type = "file", value = "/home/user/Documents/twitter_merge.sql"}

@@ -1,0 +1,1 @@
+cmd /c "C: & cd C:\Python_Environments\Example\Scripts & activate & cd C:\Example_Data\Scripts & python luigi_pipeline_example.py --scheduler-host localhost Example.ExampleUploadData"
